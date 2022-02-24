@@ -1,28 +1,26 @@
 import { Container } from "./style";
+import ContainerCenter from "../../components/ContainerCenter";
 import Title from "../../components/Title";
-import Form from "../../components/Form";
 import SubTitle from "../../components/SubTitle";
+import ThirtTitle from "../../components/ThirtTitle";
+import Form from "../../components/Form";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import TagError from "../../components/TagError";
+
 import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { kenzieHubApi } from "../../services/api";
+import { toast } from "react-toastify";
 
-const Login = () => {
+const Login = ({ auth, setAuth }) => {
   const history = useHistory();
 
   const formSchema = yup.object().shape({
     email: yup.string().required("Campo obrigatório").email("Email inválido"),
-    password: yup
-      .string()
-      .required("Campo obrigatório")
-      .matches(
-        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
-        "Precisa conter letra maiúscula, minúscula, numero e caractere especial (#?!@$%^&*-)"
-      ),
+    password: yup.string().required("Campo obrigatório"),
   });
 
   const {
@@ -34,12 +32,23 @@ const Login = () => {
   });
 
   const onSubmitFunction = (data) => {
-    console.log(data);
     kenzieHubApi
-      .post("/users", { email: data.email, password: data.password })
-      .then((res) => console.log(res))
-      .catch((res) => console.log(res));
+      .post("/sessions", { email: data.email, password: data.password })
+      .then((res) => {
+        setAuth(true);
+        localStorage.setItem("@KenzieHub:userId", res.data.user.id);
+        localStorage.setItem("@KenzieHub:token", res.data.token);
+        toast.success("Logado com sucesso");
+        history.push("/home");
+      })
+      .catch((res) => {
+        toast.error("Algo deu errado");
+      });
   };
+
+  if (auth) {
+    history.push("/home");
+  }
 
   return (
     <Container>
@@ -64,7 +73,7 @@ const Login = () => {
         <TagError>{errors.password?.message}</TagError>
 
         <Button type="submit">Entrar</Button>
-        <span>Ainda não possui uma conta?</span>
+        <ThirtTitle>Ainda não possui uma conta?</ThirtTitle>
         <Button
           color="grey"
           type="button"

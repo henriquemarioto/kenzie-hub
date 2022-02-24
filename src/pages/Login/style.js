@@ -1,19 +1,17 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    padding: 10px;
-    min-width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    margin: auto;
 
     h1{
         margin-bottom: 10px;
+        text-align: center;
     }
 
     form{
+        max-width: 300px;
+        margin: 0 auto;
         h2{
             text-align: center;
             font-size: 18px;
@@ -21,18 +19,17 @@ export const Container = styled.div`
             margin-bottom: 30px;
         }
 
-        button{
+        > button{
             margin-top: 10px;
+            width: 100%;
         }
 
         > button:nth-of-type(2){
             margin-top: 10px;
         }
 
-        span{
-            color: var(--grey-1);
-            display: block;
-            text-align: center;
+        h3{
+
             font-size: 12px;
             margin-top: 20px;
         }

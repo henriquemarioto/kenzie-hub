@@ -1,12 +1,8 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    padding: 10px;
-    min-width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+    width: 100%;
+    max-width: 370px;
 
     > div{
         width: 100%;
@@ -15,8 +11,7 @@ export const Container = styled.div`
         align-items: center;
 
         > button{
-            background-color: var(--grey-3);
-            width: 100px;
+            width: auto;
         }
     }
 
@@ -26,13 +21,8 @@ export const Container = styled.div`
         flex-direction: column;
         justify-content: center;
 
-        span{
-            font-size: 12px;
-            text-align: center;
-            display: block;
+        h3{
             margin: 20px 0;
-            color: var(--grey-1);
-
         }
 
         > button{

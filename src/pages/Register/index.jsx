@@ -1,7 +1,8 @@
 import { Container } from "./style";
 import Title from "../../components/Title";
-import Form from "../../components/Form";
 import SubTitle from "../../components/SubTitle";
+import ThirtTitle from "../../components/ThirtTitle";
+import Form from "../../components/Form";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
 import Button from "../../components/Button";
@@ -14,7 +15,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { kenzieHubApi } from "../../services/api";
 
-const Register = () => {
+const Register = ({ auth }) => {
   const history = useHistory();
 
   const formSchema = yup.object().shape({
@@ -54,7 +55,7 @@ const Register = () => {
       })
       .then((res) => {
         toast.success("Tudo certo");
-        setTimeout(() => history.push('/login'), 500)
+        setTimeout(() => history.push("/login"), 500);
       })
       .catch((res) => {
         console.log(res);
@@ -66,16 +67,22 @@ const Register = () => {
     history.push("/login");
   };
 
+  if (auth) {
+    history.push("/home");
+  }
+
   return (
     <Container>
       <div>
         <Title />
-        <Button onClick={backToLogin}>Voltar</Button>
+        <Button onClick={backToLogin} color="dark">
+          Voltar
+        </Button>
       </div>
 
       <Form onSubmit={handleSubmit(onSubmitFunction)}>
         <SubTitle>Crie sua conta</SubTitle>
-        <span>Rapido e grátis, vamos nessa</span>
+        <ThirtTitle>Rapido e grátis, vamos nessa</ThirtTitle>
         <Input
           placeholder="Digite aqui seu nome"
           name="Nome"
