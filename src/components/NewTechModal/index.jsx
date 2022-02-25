@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { kenzieHubApi } from "../../services/api";
 
-const NewTechModal = ({ className, setHidden }) => {
+const NewTechModal = ({ className, setHidden, update, setUpdate, arrTech }) => {
   const formSchema = yup.object().shape({
     title: yup.string().required("Campo obrigatório"),
     status: yup.string().required("Campo obrigatório"),
@@ -36,12 +36,11 @@ const NewTechModal = ({ className, setHidden }) => {
       })
       .then((res) => {
         toast.success("Cadastrado com sucesso");
-        console.log(res)
+        setUpdate(update + 1);
         setHidden("hidden");
       })
       .catch((res) => {
         toast.error("Algo deu errado");
-        console.log(res)
       });
   };
 
@@ -53,12 +52,13 @@ const NewTechModal = ({ className, setHidden }) => {
           <Button onClick={() => setHidden("hidden")}>X</Button>
         </div>
         <Form onSubmit={handleSubmit(onSubmitFunction)}>
-          <Input
-            name="Nome"
-            placeholder="Ex: React.js"
-            register={register}
-            registerName="title"
-          />
+          <Select name="Nome" register={register} registerName="title">
+            {arrTech.map((item, index) => (
+              <option value={item[0].toUpperCase() + item.slice(1)} key={index}>
+                {item[0].toUpperCase() + item.slice(1)}
+              </option>
+            ))}
+          </Select>
           <TagError>{errors.title?.message}</TagError>
           <Select
             name="Selecionar status"

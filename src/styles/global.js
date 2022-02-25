@@ -36,6 +36,8 @@ export default createGlobalStyle`
     }
     body {
         line-height: 1;
+        overflow-x: hidden;
+        background-color: var(--grey-4);
     }
     ol, ul {
         list-style: none;
@@ -51,10 +53,6 @@ export default createGlobalStyle`
     table {
         border-collapse: collapse;
         border-spacing: 0;
-    }
-
-    body{
-        background-color: var(--grey-4);
     }
 
     button:hover{

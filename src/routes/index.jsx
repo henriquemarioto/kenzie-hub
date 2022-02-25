@@ -34,16 +34,13 @@ const Routes = () => {
 
       <Route exact path="/home">
         {auth ? (
-          <Home
-            deslogar={deslogar}
-            setAuth={setAuth}
-          />
+          <Home deslogar={deslogar} setAuth={setAuth} />
         ) : (
           <Redirect to="/login" />
         )}
       </Route>
 
-      <Route render={() => <Redirect to="/" />} />
+      <Route render={() => <Redirect to="/login" />} />
     </Switch>
   );
 };

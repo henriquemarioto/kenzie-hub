@@ -8,7 +8,7 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import TagError from "../../components/TagError";
 
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -47,7 +47,7 @@ const Login = ({ auth, setAuth }) => {
   };
 
   if (auth) {
-    history.push("/home");
+    return <Redirect to="/home" />;
   }
 
   return (

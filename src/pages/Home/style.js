@@ -73,6 +73,48 @@ export const ContainerTecnologias = styled.div`
 
     ul{
         margin-top: 20px;
+        background-color: var(--grey-3);
+
+        > p {
+            text-align: center;
+            color: var(--grey-1);
+        }
+
+        li{
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            img{
+                width: 30px;
+                height: 30px;
+            }
+
+            h2{
+                font-weight: 400;
+                font-size: 16px;
+                margin-left: 10px;
+            }
+
+            h3{
+                margin-left: auto;
+            }
+
+            button{
+                padding: 5px;
+                background-color: transparent;
+                 
+                svg{
+                    width: 13px;
+                    height: 13px;
+                }
+            }
+
+            + li{
+                margin-top: 10px;
+            }
+        }
     }
 
 `
