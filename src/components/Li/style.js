@@ -7,5 +7,6 @@ export const LiStyled = styled.li`
 
     :hover{
         background-color: var(--grey-2);
+        cursor: pointer;
     }
 `

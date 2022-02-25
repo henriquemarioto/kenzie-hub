@@ -7,6 +7,28 @@ export const Container = styled.div`
     .hidden{
         display: none;
     }
+
+    .form__register__tech{
+        > button{
+            width: 100%;
+        }
+    }
+
+    .form__alter__tech{
+        > div:nth-of-type(2){
+            margin-top: 10px;
+        }
+
+        > div:nth-of-type(3){
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+
+            button{
+                font-size: 14px;
+            }
+        }
+    }
 `
 
 export const ContainerTitle = styled.div`
@@ -85,6 +107,10 @@ export const ContainerTecnologias = styled.div`
             justify-content: space-between;
             align-items: center;
 
+            :hover{
+                cursor: pointer;
+            }
+
             img{
                 width: 30px;
                 height: 30px;
@@ -98,16 +124,6 @@ export const ContainerTecnologias = styled.div`
 
             h3{
                 margin-left: auto;
-            }
-
-            button{
-                padding: 5px;
-                background-color: transparent;
-                 
-                svg{
-                    width: 13px;
-                    height: 13px;
-                }
             }
 
             + li{

@@ -1,7 +1,7 @@
 import {LiStyled} from './style'
 
-const Li = ({children}) => {
-    return <LiStyled>{children}</LiStyled>;
+const Li = ({children, ...rest}) => {
+    return <LiStyled {...rest}>{children}</LiStyled>;
 }
 
 export default Li
