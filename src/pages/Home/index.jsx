@@ -98,12 +98,12 @@ const Home = ({ deslogar, setAuth }) => {
         </Button>
       </ContainerTitle>
 
-      <Barra />
+      {/* <Barra /> */}
       <ContainerInfo>
         <SubTitle>Olá, {user?.name}</SubTitle>
         <ThirtTitle>{user?.course_module} (alguma coisa)</ThirtTitle>
       </ContainerInfo>
-      <Barra />
+      {/* <Barra /> */}
 
       <ContainerTecnologias>
         <div>
@@ -122,7 +122,7 @@ const Home = ({ deslogar, setAuth }) => {
 
                 <SubTitle>{item.title}</SubTitle>
                 <ThirtTitle>{item.status}</ThirtTitle>
-                <Button onClick={() => deleteTech(item.id)}>
+                <Button color="dark" onClick={() => deleteTech(item.id)}>
                   <FaTrash />
                 </Button>
               </Li>
