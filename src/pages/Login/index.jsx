@@ -14,9 +14,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { kenzieHubApi } from "../../services/api";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { signInThunk } from "../../store/modules/user/thunks";
 
 const Login = ({ auth, setAuth }) => {
   const history = useHistory();
+  const dispatch = useDispatch()
+  const { user } = useSelector(store => store);
+  console.log(user)
 
   const formSchema = yup.object().shape({
     email: yup.string().required("Campo obrigatório").email("Email inválido"),
@@ -31,19 +36,21 @@ const Login = ({ auth, setAuth }) => {
     resolver: yupResolver(formSchema),
   });
 
-  const onSubmitFunction = (data) => {
-    kenzieHubApi
-      .post("/sessions", { email: data.email, password: data.password })
-      .then((res) => {
-        setAuth(true);
-        localStorage.setItem("@KenzieHub:userId", res.data.user.id);
-        localStorage.setItem("@KenzieHub:token", res.data.token);
-        toast.success("Logado com sucesso");
-        history.push("/home");
-      })
-      .catch((res) => {
-        toast.error("Algo deu errado");
-      });
+  const onSubmitFunction = async (data) => {
+    await dispatch(signInThunk({ email: data.email, password: data.password }));
+    console.log('fim')
+    // kenzieHubApi
+    //   .post("/sessions", { email: data.email, password: data.password })
+    //   .then((res) => {
+    //     setAuth(true);
+    //     localStorage.setItem("@KenzieHub:userId", res.data.user.id);
+    //     localStorage.setItem("@KenzieHub:token", res.data.token);
+    //     toast.success("Logado com sucesso");
+    //     history.push("/home");
+    //   })
+    //   .catch((res) => {
+    //     toast.error("Algo deu errado");
+    //   });
   };
 
   if (auth) {
