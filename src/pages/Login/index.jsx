@@ -21,7 +21,6 @@ const Login = ({ auth, setAuth }) => {
   const history = useHistory();
   const dispatch = useDispatch()
   const { user } = useSelector(store => store);
-  console.log(user)
 
   const formSchema = yup.object().shape({
     email: yup.string().required("Campo obrigatório").email("Email inválido"),
@@ -37,8 +36,7 @@ const Login = ({ auth, setAuth }) => {
   });
 
   const onSubmitFunction = async (data) => {
-    await dispatch(signInThunk({ email: data.email, password: data.password }));
-    console.log('fim')
+    dispatch(signInThunk({ email: data.email, password: data.password }));
     // kenzieHubApi
     //   .post("/sessions", { email: data.email, password: data.password })
     //   .then((res) => {
@@ -52,10 +50,6 @@ const Login = ({ auth, setAuth }) => {
     //     toast.error("Algo deu errado");
     //   });
   };
-
-  if (auth) {
-    return <Redirect to="/home" />;
-  }
 
   return (
     <Container>

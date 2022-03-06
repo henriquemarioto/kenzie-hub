@@ -3,43 +3,35 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Home from "../pages/Home";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutThunk } from "../store/modules/user/thunks";
 
 const Routes = () => {
-  const [auth, setAuth] = useState(false);
+  //const [auth, setAuth] = useState(false);
+  const dispatch = useDispatch();
+  const { user } = useSelector((store) => store);
 
-  const history = useHistory();
+  const redirectToLogin = () => {
+    return <Redirect to='/login' />
+  }
 
-  //Verifica se ta logado quando carrega a primeira vez
-  useEffect(() => {
-    if (localStorage.getItem("@KenzieHub:userId")) {
-      setAuth(true);
-    }
-  }, []);
-
-  const deslogar = () => {
-    setAuth(false);
-    localStorage.clear();
-    history.push("/login");
+  const redirectToHome = () => {
+    return <Redirect to="/home" />;
   };
 
   return (
     <Switch>
       <Route exact path="/login">
-        <Login auth={auth} setAuth={setAuth} />
+        {!user.auth ? <Login /> : redirectToHome()}
       </Route>
 
       <Route exact path="/register">
-        <Register auth={auth} />
+        {!user.auth ? <Register /> : redirectToHome()}
       </Route>
 
       <Route exact path="/home">
-        {auth ? (
-          <Home deslogar={deslogar} setAuth={setAuth} />
-        ) : (
-          <Redirect to="/login" />
-        )}
+        {user.auth ? <Home /> : redirectToLogin()}
       </Route>
-
       <Route render={() => <Redirect to="/login" />} />
     </Switch>
   );

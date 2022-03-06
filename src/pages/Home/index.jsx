@@ -18,20 +18,29 @@ import TagError from "../../components/TagError";
 import { toast } from "react-toastify";
 import { FaTrash } from "react-icons/fa";
 
-import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { kenzieHubApi } from "../../services/api";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useState, useEffect } from "react";
+import { kenzieHubApi } from "../../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutThunk, updateUserThunk } from "../../store/modules/user/thunks";
 
-const Home = ({ deslogar, setAuth }) => {
-  const history = useHistory();
-  const [user, setUser] = useState({ techs: [] });
+const Home = ({ setAuth }) => {
   const [hiddenTech, setHiddenTech] = useState(true);
   const [hiddenAlterTech, setHiddenAlterTech] = useState(true);
   const [techClicked, setTechClicked] = useState();
   const [update, setUpdate] = useState(0);
+
+  const { user } = useSelector((store) => store);
+
+  const headers = {
+    headers: {
+      Authorization: `bearer ${user.token}`,
+    },
+  };
+
+  const dispatch = useDispatch();
   const arrTech = [
     "angularjs",
     "c",
@@ -57,20 +66,6 @@ const Home = ({ deslogar, setAuth }) => {
     "vuejs",
   ];
 
-  async function getUser(userId) {
-    await kenzieHubApi
-      .get(`/users/${userId}`)
-      .then((res) => {
-        setUser(res.data);
-      })
-      .catch((res) => {
-        toast.error("Usuário inválido");
-        localStorage.clear();
-        setAuth(false);
-        history.push("/login");
-      });
-  }
-
   const formSchemaTech = yup.object().shape({
     title: yup.string().required("Campo obrigatório"),
     status: yup.string().required("Campo obrigatório"),
@@ -86,11 +81,7 @@ const Home = ({ deslogar, setAuth }) => {
 
   const onSubmitFunctionTech = (data) => {
     kenzieHubApi
-      .post("/users/techs", data, {
-        headers: {
-          Authorization: `bearer ${localStorage.getItem("@KenzieHub:token")}`,
-        },
-      })
+      .post("/users/techs", data, headers)
       .then((res) => {
         toast.success("Cadastrado com sucesso");
         setUpdate(update + 1);
@@ -116,11 +107,11 @@ const Home = ({ deslogar, setAuth }) => {
 
   const onSubmitFunctionAlterTech = (data) => {
     kenzieHubApi
-      .put(`/users/techs/${localStorage.getItem("@KenzieHub:techClick")}`, data, {
-        headers: {
-          Authorization: `bearer ${localStorage.getItem("@KenzieHub:token")}`,
-        },
-      })
+      .put(
+        `/users/techs/${localStorage.getItem("@KenzieHub:techClick")}`,
+        data,
+        headers
+      )
       .then((res) => {
         toast.success("Alterado com sucesso");
         setUpdate(update + 1);
@@ -135,11 +126,7 @@ const Home = ({ deslogar, setAuth }) => {
 
   const deleteTech = (id) => {
     kenzieHubApi
-      .delete(`/users/techs/${id}`, {
-        headers: {
-          Authorization: `bearer ${localStorage.getItem("@KenzieHub:token")}`,
-        },
-      })
+      .delete(`/users/techs/${id}`, headers)
       .then((res) => {
         setUpdate(update + 1);
         toast.success("Tecnologia deletada");
@@ -148,11 +135,7 @@ const Home = ({ deslogar, setAuth }) => {
   };
 
   useEffect(() => {
-    getUser(localStorage.getItem("@KenzieHub:userId"));
-  }, []);
-
-  useEffect(() => {
-    getUser(localStorage.getItem("@KenzieHub:userId"));
+    dispatch(updateUserThunk(user.user.id));
   }, [update]);
 
   return (
@@ -163,7 +146,7 @@ const Home = ({ deslogar, setAuth }) => {
         <Button
           color="dark"
           onClick={() => {
-            deslogar();
+            dispatch(signOutThunk());
           }}
         >
           Sair
@@ -173,8 +156,8 @@ const Home = ({ deslogar, setAuth }) => {
       {/*---------------*Nome e modulo--------------- */}
       <Barra />
       <ContainerInfo>
-        <SubTitle>Olá, {user?.name}</SubTitle>
-        <ThirtTitle>{user?.course_module} (alguma coisa)</ThirtTitle>
+        <SubTitle>Olá, {user.user?.name}</SubTitle>
+        <ThirtTitle>{user.user?.course_module} (alguma coisa)</ThirtTitle>
       </ContainerInfo>
       <Barra />
 
@@ -187,8 +170,8 @@ const Home = ({ deslogar, setAuth }) => {
           </Button>
         </div>
         <Ul>
-          {user.techs.length !== 0 ? (
-            user.techs.map((item, index) => (
+          {user.user.techs.length !== 0 ? (
+            user.user.techs.map((item, index) => (
               <Li
                 key={index}
                 onClick={() => {
@@ -254,14 +237,20 @@ const Home = ({ deslogar, setAuth }) => {
             <Select disabled={true} name="Nome da tecnologia">
               <option>{techClicked.title}</option>
             </Select>
-            <Select name="Status" register={registerAlterTech} registerName="status">
+            <Select
+              name="Status"
+              register={registerAlterTech}
+              registerName="status"
+            >
               <option value="Iniciante">Iniciante</option>
               <option value="Intermediário">Intermediário</option>
               <option value="Avançado">Avançado</option>
             </Select>
             <TagError>{errorsAlterTech.status?.message}</TagError>
             <div>
-              <Button color="negative" type="submit">Salvar alterações</Button>
+              <Button color="negative" type="submit">
+                Salvar alterações
+              </Button>
               <Button
                 color="grey"
                 onClick={() => {

@@ -67,10 +67,6 @@ const Register = ({ auth }) => {
     history.push("/login");
   };
 
-  if (auth) {
-    history.push("/home");
-  }
-
   return (
     <Container>
       <div>
